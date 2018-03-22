@@ -2,8 +2,6 @@ import java.util.{Properties, Random}
 
 import org.apache.kafka.clients.producer.{KafkaProducer, ProducerRecord}
 
-import scala.collection.mutable.ArrayBuffer
-
 object MyKafkaProducer extends App {
   val Stop = "Stop"
 
@@ -17,13 +15,14 @@ object MyKafkaProducer extends App {
 
   val producer = new KafkaProducer[String,Any](props)
 
-  val bufferedSource = io.Source.fromFile("D:\\Semester-Spring-18\\Scala\\Project Stuff\\Data\\test.csv")
+  val bufferedSource = io.Source.fromFile("/Users/akshayjain/Downloads/test.csv")
   for (line <- bufferedSource.getLines) {
 
     println("--------------------------")
     println(line);
 
     producer.send(new ProducerRecord[String,Any]("my_topic1",line))
+
     Thread.sleep(new Random().nextInt(2000)+1000)
 
   }
