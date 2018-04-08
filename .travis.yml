@@ -15,7 +15,7 @@ cache:
 
 script:
    - cd $TRAVIS_BUILD_DIR/CSVKafka
-   - sbt ++$TRAVIS_SCALA_VERSION clean build
+   - sbt ++$TRAVIS_SCALA_VERSION clean
    - sbt ++$TRAVIS_SCALA_VERSION test
 
 before_cache:
