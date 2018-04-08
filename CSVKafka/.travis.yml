@@ -1,6 +1,3 @@
-# Use container-based infrastructure
-sudo: true
-
 language: scala
 
 jdk: oraclejdk8
@@ -9,12 +6,5 @@ scala:
    - 2.10.4
    - 2.12.4
 
-env:
-  # This splits the build into two parts
-  matrix:
-    - TEST_COMMAND="scripted sbt-assembly/*"
-    - TEST_COMMAND="scripted merging/* caching/*"
-
 script:
-  - sbt -Dfile.encoding=UTF8 -J-XX:ReservedCodeCacheSize=256M clean build
-  - sbt test
+   - sbt ++$TRAVIS_SCALA_VERSION test
