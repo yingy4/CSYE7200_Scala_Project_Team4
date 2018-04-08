@@ -1,6 +1,12 @@
 # Use container-based infrastructure
 sudo: false
 
+branches:
+  only:
+    - master
+    - stable
+    - Week2-Vinay
+
 language: scala
 
 jdk: oraclejdk8
