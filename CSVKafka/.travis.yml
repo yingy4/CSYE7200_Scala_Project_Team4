@@ -7,4 +7,5 @@ scala:
    - 2.12.4
 
 script:
+   - cd $TRAVIS_BUILD_DIR/CSVKafka
    - sbt ++$TRAVIS_SCALA_VERSION test
