@@ -35,7 +35,7 @@ class KafkaSpec extends FlatSpec with Matchers{
     }
   }
 
-  it should """match Amadeus""" in{
+  it should """match CSVKafka""" in{
     val topic = MyKafkaProducer.TOPIC
     topic should matchPattern{
       case "csvTopic" =>
