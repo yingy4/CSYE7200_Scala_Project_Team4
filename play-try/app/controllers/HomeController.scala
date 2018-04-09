@@ -23,25 +23,25 @@ import play.api.http.ContentTypes
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.Comet
 import play.api.libs.json._
-
-import play.api.mvc._
+import Actors.StreamDataActor
+import play.api.libs.streams.ActorFlow
 
 import scala.concurrent.duration._
 /**
- * This controller creates an `Action` to handle HTTP requests to the
- * application's home page.
- */
+  * This controller creates an `Action` to handle HTTP requests to the
+  * application's home page.
+  */
 
 
 @Singleton
 class HomeController @Inject()(implicit system: ActorSystem, materializer: Materializer,cc: ControllerComponents) extends AbstractController(cc) {
 
   /**
-   * Create an Action to render an HTML page with a welcome message.
-   * The configuration in the `routes` file means that this method
-   * will be called when the application receives a `GET` request with
-   * a path of `/`.
-   */
+    * Create an Action to render an HTML page with a welcome message.
+    * The configuration in the `routes` file means that this method
+    * will be called when the application receives a `GET` request with
+    * a path of `/`.
+    */
 
 
   var isSparkActive = false
@@ -98,7 +98,7 @@ class HomeController @Inject()(implicit system: ActorSystem, materializer: Mater
 
           actor ! inputInCaseClass
 
-         // val dataContent: Source[ByteString, _] = StreamConverters.fromInputStream(() => data)
+          // val dataContent: Source[ByteString, _] = StreamConverters.fromInputStream(() => data)
 
 
 
@@ -114,20 +114,24 @@ class HomeController @Inject()(implicit system: ActorSystem, materializer: Mater
     val dataInRDD = topicStream
     isSparkActive = true
 
-    //Ok(Html("<h1>Welcome to your application.</h1><a href='/startStreaming'>Start Spark Streaming</a>"))
-    Ok(views.html.comet())
+    Ok(Html("<h1>Welcome to your application.</h1><a href='/startStreaming'>Start Spark Streaming</a>"))
+    //Ok(views.html.comet())
   }
 
+  def streamData = WebSocket.accept[String, String] {
+    request =>  ActorFlow.actorRef {out => StreamDataActor.props(out)}
+  }
 
   def startStreaming = Action {
-    ssc.start();
-    println("Streaming Data Started!")
-    Redirect("/SparkStream")
-
+    implicit request => {
+      ssc.start()
+      println("Streaming Data Started!")
+      Ok(views.html.index("StreamData"))
+    }
   }
 
   def stopStreaming = Action {
-   // try(ssc.stop(true))
+    // try(ssc.stop(true))
 
     Redirect("/")
   }

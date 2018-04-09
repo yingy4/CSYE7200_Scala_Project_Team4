@@ -4,7 +4,7 @@ import java.util.{Random}
 
 object KafkaRunner extends App {
 
-    val bufferedSource = io.Source.fromFile("D:\\Semester-Spring-18\\Scala\\Project Stuff\\Data\\train.csv")
+    val bufferedSource = io.Source.fromFile("/Users/akshayjain/Downloads/test.csv")
     for (line <- bufferedSource.getLines) {
 
       println("--------------------------")
