@@ -3,14 +3,17 @@ package Actors
 import play.api.Logger
 import akka.actor.{Actor, ActorSystem, Props, ActorRef}
 import play.api.libs.json.Json
+import Actors.SimpleActorExample.wsOut
 
 
 class StreamDataActor(out:ActorRef) extends Actor {
 
   def receive = {
-    case "subscribe" =>
+    case "streaming" =>
+      wsOut = out
       Logger.info("Received a message")
-      out ! ("Hiiiii")
+      out ! ("Stream Data")
+
   }
 }
 

@@ -23,5 +23,3 @@ GET     /SparkStream                controllers.SparkStreamController.index
 GET     /streamData              controllers.HomeController.streamData
 
 
-#Testing the chunked
-
