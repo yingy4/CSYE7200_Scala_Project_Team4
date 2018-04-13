@@ -17,8 +17,8 @@ object SimpleActorExample {
 
     def receive = {
       case message: Any => message match {
-        case SalesInputData(product_id, _, _, _, _, _, _, _, _, _, _) =>
-          wsOut ! (product_id.toString())
+        case SalesInputData(user_id, product_id, gender, age, occupation, city, city_tenure, marital_status, product_category1, product_category2, product_category3) =>
+          wsOut ! (user_id.toString())
 
       }
     }

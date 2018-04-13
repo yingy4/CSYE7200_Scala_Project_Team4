@@ -12,8 +12,6 @@ class StreamDataActor(out:ActorRef) extends Actor {
     case "streaming" =>
       wsOut = out
       Logger.info("Received a message")
-      out ! ("Stream Data")
-
   }
 }
 
