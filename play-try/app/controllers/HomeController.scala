@@ -1,10 +1,11 @@
 package controllers
 
+import java.lang.ProcessBuilder.Redirect
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import javax.inject._
 
-import akka.actor.{ActorSystem, Props}
+import akka.actor.{ActorRef, ActorSystem, Props}
 import akka.protobuf.ByteString
 import akka.stream.Materializer
 import akka.stream.scaladsl.{Source, StreamConverters}
@@ -23,43 +24,34 @@ import play.api.http.ContentTypes
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.Comet
 import play.api.libs.json._
-
-import play.api.mvc._
+import play.api.libs.streams._
+import Actors.SimpleActorExample.ProductActor
 
 import scala.concurrent.duration._
+
 /**
- * This controller creates an `Action` to handle HTTP requests to the
- * application's home page.
- */
+  * This controller creates an `Action` to handle HTTP requests to the
+  * application's home page.
+  */
 
 
 @Singleton
-class HomeController @Inject()(implicit system: ActorSystem, materializer: Materializer,cc: ControllerComponents) extends AbstractController(cc) {
+class HomeController @Inject()(implicit system: ActorSystem, materializer: Materializer, cc: ControllerComponents) extends AbstractController(cc) {
 
   /**
-   * Create an Action to render an HTML page with a welcome message.
-   * The configuration in the `routes` file means that this method
-   * will be called when the application receives a `GET` request with
-   * a path of `/`.
-   */
+    * Create an Action to render an HTML page with a welcome message.
+    * The configuration in the `routes` file means that this method
+    * will be called when the application receives a `GET` request with
+    * a path of `/`.
+    */
 
-
-  var isSparkActive = false
 
   val ssc = new StreamingContext(new SparkConf().setAppName("MySparkStreaming").setMaster("local[2]"), Seconds(2))
 
   def index = Action {
 
 
-
     //Kafka Streaming
-
-
-
-    if(isSparkActive){
-      Redirect("/SparkStreaming")
-    }
-
 
     def createKafkaStream(ssc: StreamingContext, kafkaTopics: String, brokers: String): DStream[(String, String)] = {
       val topicsSet = kafkaTopics.split(",").toSet
@@ -74,62 +66,58 @@ class HomeController @Inject()(implicit system: ActorSystem, materializer: Mater
       )
       KafkaUtils.createDirectStream[String, String, StringDecoder, StringDecoder](ssc, props, topicsSet)
     }
+
     val TOPIC = "csvTopic"
 
-    val topicStream = createKafkaStream(ssc,TOPIC,"localhost:9092").map(_._2)
+    val topicStream = createKafkaStream(ssc, TOPIC, "localhost:9092").map(_._2)
 
-    val eachRow = topicStream.foreachRDD{
-      rdd => rdd.foreach{
-        row => {
-          val dirtyRow = row.replaceAll(",,",",EMPTY,")
+    val eachRow = topicStream.foreachRDD {
+      rdd =>
+        rdd.foreach {
+          row => {
+            val dirtyRow = row.replaceAll(",,", ",EMPTY,")
 
-          val cleanedRow = if(dirtyRow.charAt(dirtyRow.length()-1) == ',') dirtyRow+"EMPTY" else dirtyRow
+            val cleanedRow = if (dirtyRow.charAt(dirtyRow.length() - 1) == ',') dirtyRow + "EMPTY" else dirtyRow
 
-          val input = cleanedRow.split(",")
+            val input = cleanedRow.split(",")
 
-          import Utils.SalesInputData
-          //print(Some(SalesInputData(input(0).toInt,input(1),input(2),input(3),input(4),input(5),input(6),input(7),input(8),input(9),input(10))))
-          val inputInCaseClass = SalesInputData(input(0).toInt,input(1),input(2),input(3),input(4),input(5),input(6),input(7),input(8),input(9),input(10))
-          //println(inputInCaseClass)
+            import Utils.SalesInputData
+            //print(Some(SalesInputData(input(0).toInt,input(1),input(2),input(3),input(4),input(5),input(6),input(7),input(8),input(9),input(10))))
+            val inputInCaseClass = SalesInputData(input(0).toInt, input(1), input(2), input(3), input(4), input(5), input(6), input(7), input(8), input(9), input(10))
+            //println(inputInCaseClass)
+            val actSystem = ActorSystem("SimpleSystem")
 
-          val system = ActorSystem("SimpleSystem")
-          import Actors.SimpleActorExample.ProductActor
-          val actor = system.actorOf(Props[ProductActor],"ProductActor")
+            val actor = actSystem.actorOf(Props[ProductActor], "ProductActor")
 
-          actor ! inputInCaseClass
+            actor ! inputInCaseClass
 
-         // val dataContent: Source[ByteString, _] = StreamConverters.fromInputStream(() => data)
-
-
-
-          //        inputInCaseClass.map{
-          //          case (user_id,product_id,_,_,_,_,_,_,_,_,_) => (product_id,user_id)
-          //        }.reduceByKey(_ + 1)
-
+          }
         }
-      }
     }
 
 
     val dataInRDD = topicStream
-    isSparkActive = true
+    Ok(Html("<h1>Welcome to your application.</h1><a href='/startStreaming'>Start Spark Streaming</a>"))
 
-    //Ok(Html("<h1>Welcome to your application.</h1><a href='/startStreaming'>Start Spark Streaming</a>"))
-    Ok(views.html.comet())
   }
 
+  import Actors.StreamDataActor
+
+  def streamData = WebSocket.accept[String, String] {
+    request => ActorFlow.actorRef { out => StreamDataActor.props(out) }
+  }
 
   def startStreaming = Action {
-    ssc.start();
-    println("Streaming Data Started!")
-    Redirect("/SparkStream")
-
+    implicit request => {
+      ssc.start()
+      println("Streaming Data Started!")
+      Ok(views.html.index("StreamData"))
+    }
   }
 
   def stopStreaming = Action {
-   // try(ssc.stop(true))
-
     Redirect("/")
   }
+
 
 }

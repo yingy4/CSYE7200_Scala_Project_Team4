@@ -20,8 +20,6 @@ GET     /startStreaming             controllers.HomeController.startStreaming
 GET     /SparkStream                controllers.SparkStreamController.index
 
 # Stoping the spark streaming
-GET     /comet              controllers.HomeController.cometString
+GET     /streamData              controllers.HomeController.streamData
 
-
-#Testing the chunked
 
