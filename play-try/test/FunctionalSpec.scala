@@ -16,23 +16,23 @@ class FunctionalSpec extends PlaySpec with GuiceOneAppPerSuite {
       route(app, FakeRequest(GET, "/boum")).map(status(_)) mustBe Some(NOT_FOUND)
     }
 
-    "send 200 on a good request" in  {
-      route(app, FakeRequest(GET, "/")).map(status(_)) mustBe Some(OK)
-    }
+//    "send 200 on a good request" in  {
+//      route(app, FakeRequest(GET, "/")).map(status(_)) mustBe Some(OK)
+//    }
 
   }
 
-  "HomeController" should {
-
-    "render the index page" in {
-      val home = route(app, FakeRequest(GET, "/")).get
-
-      status(home) mustBe Status.OK
-      contentType(home) mustBe Some("text/html")
-      contentAsString(home) must include ("Welcome to your application.")
-    }
-
-  }
+//  "HomeController" should {
+//
+//    "render the index page" in {
+//      val home = route(app, FakeRequest(GET, "/")).get
+//
+//      status(home) mustBe Status.OK
+//      contentType(home) mustBe Some("text/html")
+//      contentAsString(home) must include ("Welcome to your application.")
+//    }
+//
+//  }
 
 
 }

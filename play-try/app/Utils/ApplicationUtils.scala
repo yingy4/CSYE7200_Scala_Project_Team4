@@ -3,6 +3,8 @@ package Utils
 import org.apache.spark.SparkConf
 import org.apache.spark.streaming.{Seconds, StreamingContext}
 
+import scala.collection.mutable.ListBuffer
+
 object ApplicationUtils {
 
 
@@ -26,5 +28,7 @@ object ApplicationUtils {
 
     cleanedRow
   }
+
+  val bufferList = new ListBuffer[String]()
 
 }

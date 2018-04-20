@@ -26,7 +26,7 @@ import play.api.libs.Comet
 import play.api.libs.json._
 import play.api.libs.streams._
 import Actors.SimpleActorExample.ProductActor
-import Utils.ApplicationUtils.{ssc,cleanDataFunction}
+import Utils.ApplicationUtils.{ssc,cleanDataFunction,bufferList}
 
 import scala.concurrent.duration._
 
@@ -87,14 +87,17 @@ class HomeController @Inject()(implicit system: ActorSystem, materializer: Mater
 
             import Utils.SalesInputData
             //print(Some(SalesInputData(input(0).toInt,input(1),input(2),input(3),input(4),input(5),input(6),input(7),input(8),input(9),input(10))))
-            val inputInCaseClass = SalesInputData(input(0).toInt, input(1), input(2), input(3), input(4), input(5), input(6), input(7), input(8), input(9), input(10))
+            val inputInCaseClass = SalesInputData(input(0).toInt, input(1), input(2), input(3), input(4), input(5), input(6), input(7), input(8), input(9), input(10), input(11))
             //println(inputInCaseClass)
             val actSystem = ActorSystem("SimpleSystem")
 
             val actor = actSystem.actorOf(Props[ProductActor], "ProductActor")
 
-
-
+            bufferList += input(0)
+            if(bufferList.length%10==0) {
+              val map = bufferList.groupBy(identity).mapValues(_.size)
+              println("Buffer List "+map)
+            }
             actor ! inputInCaseClass
 
           }
