@@ -1,43 +1,54 @@
 import akka.actor.ActorSystem
-import controllers.{AsyncController, CountController}
 import org.scalatestplus.play._
 import play.api.test.Helpers._
 import play.api.test.FakeRequest
 import services.Counter
+import Utils.ApplicationUtils.{cleanDataFunction,ssc}
 
 /**
  * Unit tests can run without a full Play application.
  */
 class UnitSpec extends PlaySpec {
 
-  "CountController" should {
 
-    "return a valid result with action" in {
-      val counter: Counter = new Counter {
-        override def nextCount(): Int = 49
-      }
-      val controller = new CountController(stubControllerComponents(), counter)
-      val result = controller.count(FakeRequest())
-      contentAsString(result) must equal("49")
-    }
-  }
+  "SparkContext" should {
 
-  "AsyncController" should {
+    "match sparkStreamingContext AppName" in {
 
-    "return a valid result on action.async" in {
-      // actor system will create threads that must be cleaned up even if test fails
-      val actorSystem = ActorSystem("test")
-      try {
-        implicit val ec = actorSystem.dispatcher
-        val controller = new AsyncController(stubControllerComponents(), actorSystem)
-        val resultFuture = controller.message(FakeRequest())
-        contentAsString(resultFuture) must be("Hi!")
-      } finally {
-        // always shut down actor system at the end of the test.
-        actorSystem.terminate()
-      }
+      ssc.sparkContext.appName must equal("MySparkStreaming")
+
     }
 
+    "match sparkStreamingContext current execution status" in {
+
+      ssc.sparkContext.isStopped must equal(false)
+
+    }
+
+    "match sparkStreamingContext isLocal status" in {
+
+      ssc.sparkContext.isLocal must equal(true)
+
+    }
+
+    "match sparkStreamingContext version" in {
+      ssc.sparkContext.version must equal("2.3.0")
+    }
+
+
   }
+
+    "CleanDataFunction" should
+      {
+        "return a cleaned row" in {
+
+          val answer = cleanDataFunction("1005972,P00214142,F,26-35,20,B,0,0,8,,");
+
+          answer must equal("1005972,P00214142,F,26-35,20,B,0,0,8,EMPTY,EMPTY")
+
+        }
+      }
+
+
 
 }

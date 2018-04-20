@@ -26,6 +26,7 @@ import play.api.libs.Comet
 import play.api.libs.json._
 import play.api.libs.streams._
 import Actors.SimpleActorExample.ProductActor
+import Utils.ApplicationUtils.{ssc,cleanDataFunction}
 
 import scala.concurrent.duration._
 
@@ -46,7 +47,7 @@ class HomeController @Inject()(implicit system: ActorSystem, materializer: Mater
     */
 
 
-  val ssc = new StreamingContext(new SparkConf().setAppName("MySparkStreaming").setMaster("local[2]"), Seconds(2))
+
 
   def index = Action {
 
@@ -75,9 +76,12 @@ class HomeController @Inject()(implicit system: ActorSystem, materializer: Mater
       rdd =>
         rdd.foreach {
           row => {
-            val dirtyRow = row.replaceAll(",,", ",EMPTY,")
 
-            val cleanedRow = if (dirtyRow.charAt(dirtyRow.length() - 1) == ',') dirtyRow + "EMPTY" else dirtyRow
+            val cleanedRow = cleanDataFunction(row)
+
+//            val dirtyRow = row.replaceAll(",,", ",EMPTY,")
+//
+//            val cleanedRow = if (dirtyRow.charAt(dirtyRow.length() - 1) == ',') dirtyRow + "EMPTY" else dirtyRow
 
             val input = cleanedRow.split(",")
 
@@ -88,6 +92,8 @@ class HomeController @Inject()(implicit system: ActorSystem, materializer: Mater
             val actSystem = ActorSystem("SimpleSystem")
 
             val actor = actSystem.actorOf(Props[ProductActor], "ProductActor")
+
+
 
             actor ! inputInCaseClass
 
@@ -100,6 +106,11 @@ class HomeController @Inject()(implicit system: ActorSystem, materializer: Mater
     Ok(Html("<h1>Welcome to your application.</h1><a href='/startStreaming'>Start Spark Streaming</a>"))
 
   }
+
+
+
+
+
 
   import Actors.StreamDataActor
 

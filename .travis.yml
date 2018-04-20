@@ -20,6 +20,9 @@ script:
    - cd $TRAVIS_BUILD_DIR/CSVKafka
    - sbt ++$TRAVIS_SCALA_VERSION clean
    - sbt ++$TRAVIS_SCALA_VERSION test
+   - cd $TRAVIS_BUILD_DIR/play-try
+   - sbt ++$TRAVIS_SCALA_VERSION clean
+   - sbt ++$TRAVIS_SCALA_VERSION test
 
 before_cache:
   # Tricks to avoid unnecessary cache updates

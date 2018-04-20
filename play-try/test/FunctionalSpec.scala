@@ -29,18 +29,10 @@ class FunctionalSpec extends PlaySpec with GuiceOneAppPerSuite {
 
       status(home) mustBe Status.OK
       contentType(home) mustBe Some("text/html")
-      contentAsString(home) must include ("Your new application is ready.")
+      contentAsString(home) must include ("Welcome to your application.")
     }
 
   }
 
-  "CountController" should {
 
-    "return an increasing count" in {
-      contentAsString(route(app, FakeRequest(GET, "/count")).get) mustBe "0"
-      contentAsString(route(app, FakeRequest(GET, "/count")).get) mustBe "1"
-      contentAsString(route(app, FakeRequest(GET, "/count")).get) mustBe "2"
-    }
-
-  }
 }

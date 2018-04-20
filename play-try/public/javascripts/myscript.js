@@ -5,52 +5,88 @@ var url = "ws://localhost:9000/streamData";
 var streamSocket = new WebSocket(url);
 streamSocket.onmessage = function (event) {
 
-console.log(event);
-//debugger;
+console.log(event.data);
+debugger;
 var data = event.data;
 
 availableAnalytics(data);
 };
 streamSocket.onopen = function() {
 streamSocket.send("streaming");
+
 };
 
 
 
 // main logic
-var productsOnChart = [];
-var currentProductsCount = [["1002181",0]];
+var productsOnChart = [], allProductsCount=[];
+var currentUsersCount = [];//[["1002181",0]];
 
-    function availableAnalytics(product){
+    function availableAnalytics(salesItemRow){
+
         console.log(product);
-       var found = currentProductsCount.findIndex(function(element) {
-            return element[0] == product;
+       var productJsonObject = JSON.parse(salesItemRow);
+
+
+         var foundProduct = allProductsCount.findIndex(function(element) {
+                   return element[1] == allProductsCount.product_id;
+               });
+
+        if(foundProduct == -1){
+               var product = [productJsonObject.product_id,1];
+               allProductsCount.push(product);
+           }
+           else{
+               allProductsCount[foundProduct][1] = allProductsCount[foundProduct][1] + 1;
+         }
+
+
+
+        var foundUser = currentUsersCount.findIndex(function(element) {
+            return element[0] == String(productJsonObject.user_id);
         });
         debugger;
+
+
+
+
         //Product is not present
-        if(found == -1){
-            var product = [product,1];
-            currentProductsCount.push(product);
+        if(currentUsersCount.length < 15){
+
+
+        if(foundUser == -1){
+            var user = [String(productJsonObject.user_id),1];
+            currentUsersCount.push(user);
         }
         else{
-            currentProductsCount[found][1] = currentProductsCount[found][1] + 1;
+            currentUsersCount[foundUser][1] = currentUsersCount[foundUser][1] + 1;
+        }
+        } else{
+            resetUsersChart();
         }
         refreshChart();
-        singleproduct();
+
+    }
+
+
+    function resetUsersChart(){
+        currentUsersCount = [];
     }
 
     function addProduct() {
     var productId = document.getElementById('product_id').value;
         console.log("Adding Product: "+productId);
+        productsOnChart = [];
         var newProduct = [productId.toString(),1];
         productsOnChart.push(newProduct);
-
+        document.getElementById('product_id').value = "";
+        singleproduct();
     }
 
 
 
 
-//allProducts Highchart
+//all Users Highchart
 
 function refreshChart(){
     Highcharts.chart('container', {
@@ -58,10 +94,10 @@ function refreshChart(){
         type: 'column'
     },
     title: {
-        text: 'Real-time Product Sales Chart'
+        text: 'Real-time Users Buying Products Chart'
     },
     subtitle: {
-        text: 'Current Products Sales Data'
+        text: 'Current Users Buying Count'
     },
         plotOptions : {
         column: {
@@ -70,6 +106,7 @@ function refreshChart(){
 
         },
     xAxis: {
+    categories:[],
         type: 'category',
         labels: {
             rotation: -45,
@@ -82,18 +119,18 @@ function refreshChart(){
     yAxis: {
         min: 0,
         title: {
-            text: 'Product Sales Count'
+            text: 'Users Buying Products Count'
         }
     },
     legend: {
         enabled: false
     },
     tooltip: {
-        pointFormat: 'Current Product Sales count: <b>{point.y:.1f} </b>'
+        pointFormat: 'Current Product Buying count: <b>{point.y:.1f} </b>'
     },
     series: [{
         name: 'Population',
-        data: currentProductsCount,
+        data: currentUsersCount,
         dataLabels: {
             enabled: true,
             rotation: -90,
@@ -129,16 +166,19 @@ Highcharts.chart('singleProduct', {
 
                 // set up the updating of the chart each second
                 var series = this.series[0];
-                setInterval(function () {
-                    var x = (new Date()).getTime(), // current time
-                        y = Math.random();
-                    series.addPoint([x, y], true, true);
-                }, 1000);
+                var product = allProductsCount.find(function(e){return e[0] == productsOnChart[0][0]});
+                if(product != undefined){
+                    setInterval(function () {
+                        var x = (new Date()).getTime(), // current time
+                            y = product[1];
+                        series.addPoint([x, y], true, true);
+                    }, 1000);
+                }
             }
         }
     },
     title: {
-        text: 'Live random data'
+        text: 'Live Product Sales Ticker :'+ productsOnChart[0][0]
     },
     xAxis: {
         type: 'datetime',
@@ -168,7 +208,7 @@ Highcharts.chart('singleProduct', {
         enabled: false
     },
     series: [{
-        name: 'Random data',
+        name: 'Currently sold',
         data: (function () {
             // generate an array of random data
             var data = [],
@@ -176,10 +216,14 @@ Highcharts.chart('singleProduct', {
                 i;
 
             for (i = -19; i <= 0; i += 1) {
+            var product = allProductsCount.find(function(e){return e[0] == productsOnChart[0][0]});
+            if(product != undefined){
                 data.push({
                     x: time + i * 1000,
-                    y: Math.random()
+                    y: product[1]
                 });
+            }
+
             }
             return data;
         }())
