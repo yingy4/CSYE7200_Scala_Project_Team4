@@ -42,9 +42,9 @@ class UnitSpec extends PlaySpec {
       {
         "return a cleaned row" in {
 
-          val answer = cleanDataFunction("1005972,P00214142,F,26-35,20,B,0,0,8,,,");
+          val answer = cleanDataFunction("1005972,P00214142,F,26-35,20,B,0,0,8,,5,");
 
-          answer must equal("1005972,P00214142,F,26-35,20,B,0,0,8,EMPTY,EMPTY,EMPTY")
+          answer must equal("1005972,P00214142,F,26-35,20,B,0,0,8,EMPTY,5,EMPTY")
 
         }
       }
