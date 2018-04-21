@@ -26,7 +26,7 @@ import play.api.libs.Comet
 import play.api.libs.json._
 import play.api.libs.streams._
 import Actors.SimpleActorExample.ProductActor
-import Utils.ApplicationUtils.{ssc,cleanDataFunction,bufferList,productCategory}
+import Utils.ApplicationUtils._
 
 import scala.concurrent.duration._
 
@@ -51,25 +51,6 @@ class HomeController @Inject()(implicit system: ActorSystem, materializer: Mater
 
   def index = Action {
 
-
-    //Kafka Streaming
-
-    def createKafkaStream(ssc: StreamingContext, kafkaTopics: String, brokers: String): DStream[(String, String)] = {
-      val topicsSet = kafkaTopics.split(",").toSet
-      val props = Map(
-        "bootstrap.servers" -> "localhost:9092",
-        "metadata.broker.list" -> "localhost:9092",
-        "serializer.class" -> "kafka.serializer.StringEncoder",
-        "value.serializer" -> "org.apache.kafka.common.serialization.StringSerializer",
-        "value.deserializer" -> "org.apache.kafka.common.serialization.StringDeserializer",
-        "key.serializer" -> "org.apache.kafka.common.serialization.StringSerializer",
-        "key.deserializer" -> "org.apache.kafka.common.serialization.StringDeserializer"
-      )
-      KafkaUtils.createDirectStream[String, String, StringDecoder, StringDecoder](ssc, props, topicsSet)
-    }
-
-    val TOPIC = "csvTopic"
-
     val topicStream = createKafkaStream(ssc, TOPIC, "localhost:9092").map(_._2)
 
     val eachRow = topicStream.foreachRDD {
@@ -83,33 +64,20 @@ class HomeController @Inject()(implicit system: ActorSystem, materializer: Mater
 
             import Utils.SalesInputData
             val inputInCaseClass = SalesInputData(input(0).toInt, input(1), input(2), input(3), input(4), input(5), input(6), input(7), input(8), input(9), input(10), input(11))
-            val actSystem = ActorSystem("SimpleSystem")
 
-            val actor = actSystem.actorOf(Props[ProductActor], "ProductActor")
 
-            bufferList += input(0)
+            val productId = input(1)
+            productBufferList += ((productId,"-"))
             val category = input(8)
             val city = input(5)
-            productCategory +=((category,city))
-//
-//            if(bufferList.length%10==0) {
-//              val map = bufferList.groupBy(identity).mapValues(_.size)
-//              val json = Json.toJson(map)
-//               // println("JsonObject " +Json.stringify(json))
-//               // println("String Map "+map)
-//              actor ! Json.stringify(json)
-//
-//            }
+            productCategoryBufferList +=((category,city))
 
-            if(productCategory.length%10==0) {
-              val prod = productCategory.groupBy(identity).mapValues(_.size)
-              //println(:t prod)
+            if(productBufferList.length%2==0) {
+              sendDataToActor(productBufferList)
+            }
 
-
-              val json = Json.toJson(prod)
-
-              actor ! Json.stringify(json)
-
+            if(productCategoryBufferList.length%5==0) {
+              sendDataToActor(productCategoryBufferList)
             }
 
           //  actor ! inputInCaseClass
