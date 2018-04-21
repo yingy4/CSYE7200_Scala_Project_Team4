@@ -26,7 +26,7 @@ import play.api.libs.Comet
 import play.api.libs.json._
 import play.api.libs.streams._
 import Actors.SimpleActorExample.ProductActor
-import Utils.ApplicationUtils.{ssc,cleanDataFunction,bufferList}
+import Utils.ApplicationUtils.{ssc,cleanDataFunction,bufferList,productCategory}
 
 import scala.concurrent.duration._
 
@@ -79,26 +79,40 @@ class HomeController @Inject()(implicit system: ActorSystem, materializer: Mater
 
             val cleanedRow = cleanDataFunction(row)
 
-//            val dirtyRow = row.replaceAll(",,", ",EMPTY,")
-//
-//            val cleanedRow = if (dirtyRow.charAt(dirtyRow.length() - 1) == ',') dirtyRow + "EMPTY" else dirtyRow
-
             val input = cleanedRow.split(",")
 
             import Utils.SalesInputData
-            //print(Some(SalesInputData(input(0).toInt,input(1),input(2),input(3),input(4),input(5),input(6),input(7),input(8),input(9),input(10))))
             val inputInCaseClass = SalesInputData(input(0).toInt, input(1), input(2), input(3), input(4), input(5), input(6), input(7), input(8), input(9), input(10), input(11))
-            //println(inputInCaseClass)
             val actSystem = ActorSystem("SimpleSystem")
 
             val actor = actSystem.actorOf(Props[ProductActor], "ProductActor")
 
             bufferList += input(0)
-            if(bufferList.length%10==0) {
-              val map = bufferList.groupBy(identity).mapValues(_.size)
-              println("Buffer List "+map)
+            val category = input(8)
+            val city = input(5)
+            productCategory +=((category,city))
+//
+//            if(bufferList.length%10==0) {
+//              val map = bufferList.groupBy(identity).mapValues(_.size)
+//              val json = Json.toJson(map)
+//               // println("JsonObject " +Json.stringify(json))
+//               // println("String Map "+map)
+//              actor ! Json.stringify(json)
+//
+//            }
+
+            if(productCategory.length%10==0) {
+              val prod = productCategory.groupBy(identity).mapValues(_.size)
+              //println(:t prod)
+
+
+              val json = Json.toJson(prod)
+
+              actor ! Json.stringify(json)
+
             }
-            actor ! inputInCaseClass
+
+          //  actor ! inputInCaseClass
 
           }
         }
@@ -109,11 +123,6 @@ class HomeController @Inject()(implicit system: ActorSystem, materializer: Mater
     Ok(Html("<h1>Welcome to your application.</h1><a href='/startStreaming'>Start Spark Streaming</a>"))
 
   }
-
-
-
-
-
 
   import Actors.StreamDataActor
 

@@ -31,4 +31,6 @@ object ApplicationUtils {
 
   val bufferList = new ListBuffer[String]()
 
+  val productCategory: ListBuffer[(String,String)] =  ListBuffer()
+
 }
