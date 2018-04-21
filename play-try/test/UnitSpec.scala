@@ -5,6 +5,8 @@ import play.api.test.FakeRequest
 import services.Counter
 import Utils.ApplicationUtils._
 
+import scala.collection.mutable.ListBuffer
+
 /**
  * Unit tests can run without a full Play application.
  */
@@ -171,6 +173,43 @@ class UnitSpec extends PlaySpec {
 
     }
 
+
+
+
+  }
+
+  "Data Analytics" should {
+
+    "Summation of userIDBufferList size 1" in {
+
+      val answer = sendUsersDataToActor(ListBuffer((1000036,"UserID")))
+        answer must equal("[[[1000036,\"UserID\"],1]]")
+    }
+
+    "Summation of userIDBufferList size greater than 1" in {
+
+      val answer = sendUsersDataToActor(ListBuffer((1000036,"UserID"), (1000036,"UserID"), (1000036,"UserID"), (1000036,"UserID"), (1000036,"UserID"), (1000036,"UserID"), (1000036,"UserID"), (1000037,"UserID"), (1000039,"UserID"), (1000039,"UserID"), (1000041,"UserID"), (1000041,"UserID"), (1000042,"UserID"), (1000042,"UserID"), (1000042,"UserID")))
+      println(answer)
+      answer must equal("[[[1000042,\"UserID\"],3],[[1000041,\"UserID\"],2],[[1000036,\"UserID\"],7],[[1000039,\"UserID\"],2],[[1000037,\"UserID\"],1]]")
+    }
+
+    "Summation of productBufferList size 1" in {
+
+      val answer = sendProductsDataToActor(ListBuffer(("P00331842","ProductID"), ("P00288642","ProductID")))
+      answer must equal("[[[\"P00288642\",\"ProductID\"],1],[[\"P00331842\",\"ProductID\"],1]]")
+    }
+
+    "Summation of productBufferList size greater than 1" in {
+
+      val answer = sendProductsDataToActor(ListBuffer(("P00331842","ProductID"),("P00331842","ProductID"),("P00331842","ProductID"),("P00331842","ProductID"),("P00288642","ProductID")))
+      answer must equal("[[[\"P00288642\",\"ProductID\"],1],[[\"P00331842\",\"ProductID\"],4]]")
+    }
+
+    "Summation of productCategoryBufferList" in {
+
+      val answer = sendProductsDataToActor(ListBuffer(("16","B"), ("16","B"), ("1","B"), ("1","B"), ("1","B")))
+      answer must equal("[[[\"1\",\"B\"],3],[[\"16\",\"B\"],2]]")
+    }
 
 
 

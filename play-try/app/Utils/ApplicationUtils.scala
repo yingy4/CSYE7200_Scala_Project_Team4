@@ -98,12 +98,12 @@ object ApplicationUtils {
     * Method to send data to web socket Actor in JSON format
     * @param data
     */
-  def sendProductsDataToActor(data:ListBuffer[(String,String)]) : Unit = {
+  def sendProductsDataToActor(data:ListBuffer[(String,String)]) : String = {
 
     val dataInMap = data.groupBy(identity).mapValues(_.size)
     val json = Json.toJson(dataInMap)
     productActor ! Json.stringify(json)
-
+    Json.stringify(json)
   }
 
 
@@ -111,7 +111,7 @@ object ApplicationUtils {
     * Method to send data to web socket Actor in JSON format
     * @param data
     */
-  def sendUsersDataToActor(data:ListBuffer[(Int,String)]) : Unit = {
+  def sendUsersDataToActor(data:ListBuffer[(Int,String)]) : String = {
 
     val dataInMap = data.groupBy(identity).mapValues(_.size)
     /**
@@ -124,7 +124,7 @@ object ApplicationUtils {
     val top10 = dataInMap.toSeq.sortBy(- _._2).toMap.take(10)
     val json = Json.toJson(top10)
     productActor ! Json.stringify(json)
-
+    Json.stringify(json)
   }
 
 
