@@ -63,21 +63,27 @@ class HomeController @Inject()(implicit system: ActorSystem, materializer: Mater
             val input = cleanedRow.split(",")
 
             import Utils.SalesInputData
-            val inputInCaseClass = SalesInputData(input(0).toInt, input(1), input(2), input(3), input(4), input(5), input(6), input(7), input(8), input(9), input(10), input(11))
+            implicit def stringtoInt(s:String): Int = augmentString(s).toInt
+
+            val inputInCaseClass = SalesInputData(input(0), input(1), input(2), input(3), input(4), input(5), input(6), input(7), input(8), input(9), input(10), input(11))
 
 
             val productId = input(1)
-            productBufferList += ((productId,"-"))
+            productBufferList += ((productId,"ProductID"))
             val category = input(8)
             val city = input(5)
             productCategoryBufferList +=((category,city))
 
+            val userId = input(0)
+            userIDBufferList += ((userId,"UserID"))
+            sendUsersDataToActor(userIDBufferList)
+
             if(productBufferList.length%2==0) {
-              sendDataToActor(productBufferList)
+              sendProductsDataToActor(productBufferList)
             }
 
             if(productCategoryBufferList.length%5==0) {
-              sendDataToActor(productCategoryBufferList)
+              sendProductsDataToActor(productCategoryBufferList)
             }
 
           //  actor ! inputInCaseClass

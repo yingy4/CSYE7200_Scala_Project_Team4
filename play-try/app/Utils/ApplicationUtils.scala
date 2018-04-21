@@ -79,6 +79,11 @@ object ApplicationUtils {
   }
 
   /**
+    * Caching the userIDs which are received by streams
+    */
+  val userIDBufferList:  ListBuffer[(Int,String)]  = ListBuffer()
+
+  /**
     * Caching the product which are received by streams
     */
   val productBufferList:  ListBuffer[(String,String)]  = ListBuffer()
@@ -93,10 +98,31 @@ object ApplicationUtils {
     * Method to send data to web socket Actor in JSON format
     * @param data
     */
-  def sendDataToActor(data:ListBuffer[(String,String)]) : Unit = {
+  def sendProductsDataToActor(data:ListBuffer[(String,String)]) : Unit = {
 
     val dataInMap = data.groupBy(identity).mapValues(_.size)
     val json = Json.toJson(dataInMap)
+    productActor ! Json.stringify(json)
+
+  }
+
+
+  /**
+    * Method to send data to web socket Actor in JSON format
+    * @param data
+    */
+  def sendUsersDataToActor(data:ListBuffer[(Int,String)]) : Unit = {
+
+    val dataInMap = data.groupBy(identity).mapValues(_.size)
+    /**
+      * Taking top 10 users from the map
+      * 1. converting map to Seq
+      * 2. sorting in reverse order by value using (-)
+      * 3. Converting back to map
+      * 4. taking top 10
+      */
+    val top10 = dataInMap.toSeq.sortBy(- _._2).toMap.take(10)
+    val json = Json.toJson(top10)
     productActor ! Json.stringify(json)
 
   }

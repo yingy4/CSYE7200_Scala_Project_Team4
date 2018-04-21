@@ -17,10 +17,7 @@ object SimpleActorExample {
   class ProductActor extends Actor {
     implicit private val SalesWrites = Json.writes[SalesInputData]
     def receive = {
-      case message: SalesInputData => message match {
-        case SalesInputData(user_id, product_id, gender, age, occupation, city, city_tenure, marital_status, product_category1, product_category2, product_category3, purchaseAmount) =>
-          //wsOut ! (user_id.toString())
-
+      case message: SalesInputData =>{
           val json = Json.toJson(message)
           if(wsOut != null)
           wsOut ! Json.stringify(json)

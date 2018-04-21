@@ -5,7 +5,7 @@ var url = "ws://localhost:9000/streamData";
 var streamSocket = new WebSocket(url);
 streamSocket.onmessage = function (event) {
 
-console.log(event.data);
+//console.log(event.data);
 debugger;
 var data = event.data;
 
@@ -31,52 +31,27 @@ var currentUsersCount = [];//[["1002181",0]];
        // console.log(product);
        productJsonObject = JSON.parse(salesItemRow);
 debugger;
-if(productJsonObject[0][0][1]=='-')
+if(productJsonObject[0][0][1]=='ProductID')
 {
    allProductsCount = productJsonObject;
 }
+
+else if(productJsonObject[0][0][1]=='UserID')
+{
+    currentUsersCount=[];
+    for(var i =0;i<productJsonObject.length;i++){
+    obj = ["UserID : "+productJsonObject[i][0][0],productJsonObject[i][1]];
+    currentUsersCount.push(obj);
+}
+
+        refreshChart();
+}
+
 
 else if(productJsonObject!=undefined && productJsonObject[0][0].length==2)
 {
     productCategoryCitydataUpdate()
 }
-
-else{
-//         var foundProduct = allProductsCount.findIndex(function(element) {
-//                   return element[1] == allProductsCount.product_id;
-//               });
-//
-//        if(foundProduct == -1){
-//               var product = [productJsonObject.product_id,1];
-//               allProductsCount.push(product);
-//           }
-//           else{
-//               allProductsCount[foundProduct][1] = allProductsCount[foundProduct][1] + 1;
-//         }
-
-
-
-        var foundUser = currentUsersCount.findIndex(function(element) {
-            return element[0] == String(productJsonObject.user_id);
-        });
-        debugger;
-
-
-        if(currentUsersCount.length < 15){
-
-
-        if(foundUser == -1){
-            var user = [String(productJsonObject.user_id),1];
-            currentUsersCount.push(user);
-        }
-        else{
-            currentUsersCount[foundUser][1] = currentUsersCount[foundUser][1] + 1;
-        }
-        } else{
-            resetUsersChart();
-        }
-        refreshChart();
-        }
 
     }
 
@@ -87,7 +62,6 @@ else{
 
     function addProduct() {
     var productId = document.getElementById('product_id').value;
-        console.log("Adding Product: "+productId);
         productsOnChart = [];
         var newProduct = [productId.toString(),1];
         productsOnChart.push(newProduct);
@@ -101,9 +75,9 @@ function productCategoryCitydataUpdate()
 {
     for(var i= 0;i<productJsonObject.length;i++){
     var index = productJsonObject[i][0][0];
-    console.log(index);
+
     var city = productJsonObject[i][0][1];
-    console.log(city);
+
     if(city == 'A')
     {
         cityACount[index] =productJsonObject[i][1];
@@ -188,7 +162,7 @@ function refreshChart(){
         type: 'column'
     },
     title: {
-        text: 'Real-time Users Buying Products Chart'
+        text: 'Top 10 Users Buying Products Chart'
     },
     subtitle: {
         text: 'Current Users Buying Count'
@@ -220,7 +194,7 @@ function refreshChart(){
         enabled: false
     },
     tooltip: {
-        pointFormat: 'Current Product Buying count: <b>{point.y:.1f} </b>'
+        pointFormat: '<b>{point.x:.1f} </b> Current Product Buying count: <b>{point.y:.1f} </b>'
     },
     series: [{
         name: 'Population',
