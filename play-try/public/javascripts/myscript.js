@@ -13,7 +13,7 @@ availableAnalytics(data);
 };
 streamSocket.onopen = function() {
 streamSocket.send("streaming");
-
+ageGroupHighChart();
 };
 
 // main logic
@@ -22,6 +22,8 @@ var productCategory = new Array(20);
 var cityACount = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
 var cityBCount = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
 var cityCCount = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+var ageGenderData = {"0-17":0,"18-25":0,"26-35":0,"36-45":0,"46-50":0,"51-55":0,"55+":0}
+
  var productJsonObject;
 
 var currentUsersCount = [];//[["1002181",0]];
@@ -35,7 +37,12 @@ if(productJsonObject[0][0][1]=='ProductID')
 {
    allProductsCount = productJsonObject;
 }
-
+else if(productJsonObject[0][0][1]=='AgeGroup'){
+    for(var i =0;i<productJsonObject.length;i++){
+        ageGenderData[productJsonObject[i][0][0]] = productJsonObject[i][1]
+    }
+    ageGroupHighChart();
+}
 else if(productJsonObject[0][0][1]=='UserID')
 {
     currentUsersCount=[];
@@ -297,5 +304,64 @@ Highcharts.chart('singleProduct', {
         }())
     }]
 });
+}
+
+function ageGroupHighChart(){
+
+Highcharts.chart('ageGroup', {
+    chart: {
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+        plotShadow: false,
+        type: 'pie'
+    },
+    title: {
+        text: 'Buying Users count per Age group'
+    },
+    tooltip: {
+        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+    },
+    plotOptions: {
+        pie: {
+            allowPointSelect: true,
+            cursor: 'pointer',
+            dataLabels: {
+                enabled: true,
+                format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                style: {
+                    color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                }
+            }
+        }
+    },
+    series: [{
+        name: 'Number of Buyers',
+        colorByPoint: true,
+        data: [{
+            name: 'Age-Group: 0-17',
+            y: ageGenderData["0-17"]
+        }, {
+            name: 'Age-Group: 18-25',
+            y: ageGenderData["18-25"]
+        }, {
+            name: 'Age-Group: 26-35',
+            y: ageGenderData["26-35"]
+        }, {
+            name: 'Age-Group: 36-45',
+            y: ageGenderData["36-45"]
+        }, {
+            name: 'Age-Group: 46-50',
+            y: ageGenderData["46-50"]
+        }, {
+            name: 'Age-Group: 51-55',
+            y: ageGenderData["51-55"]
+        }, {
+            name: 'Age-Group: 55+',
+            y: ageGenderData["55+"]
+        }]
+    }]
+});
+
+
 }
 

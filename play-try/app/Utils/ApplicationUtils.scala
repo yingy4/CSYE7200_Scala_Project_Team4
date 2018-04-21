@@ -95,6 +95,19 @@ object ApplicationUtils {
 
 
   /**
+    * Caching the details of purchases made by each group sold per category per city
+    */
+  val ageGenderPurchasesBufferList: ListBuffer[(String,String)] =  ListBuffer()
+
+
+
+  /**
+    * Caching the details of purchases made by each group sold per category per city
+    */
+  val ageBufferList: ListBuffer[(String,String)] =  ListBuffer()
+
+
+  /**
     * Method to send data to web socket Actor in JSON format
     * @param data
     */

@@ -27,6 +27,7 @@ import play.api.libs.json._
 import play.api.libs.streams._
 import Actors.SimpleActorExample.ProductActor
 import Utils.ApplicationUtils._
+import Utils._
 
 import scala.concurrent.duration._
 
@@ -67,16 +68,49 @@ class HomeController @Inject()(implicit system: ActorSystem, materializer: Mater
 
             val inputInCaseClass = SalesInputData(input(0), input(1), input(2), input(3), input(4), input(5), input(6), input(7), input(8), input(9), input(10), input(11))
 
+            val ProductCategoryCitySalesInputDataCaseClass = ProductCategoryCitySalesInputData(input(8),input(5))
 
-            val productId = input(1)
+            val AgeGroupPurchasesSalesInputDataCaseClass = AgeGroupPurchasesSalesInputData(input(3),input(11))
+
+            val productId = inputInCaseClass match {
+              case SalesInputData(_, product_id: String, _,_,_,_,_,_,_,_,_,_) =>
+                product_id
+            }
+
+            val category = ProductCategoryCitySalesInputDataCaseClass match {
+              case ProductCategoryCitySalesInputData(product_category1,city) =>
+                product_category1
+            }
+
+            val city = ProductCategoryCitySalesInputDataCaseClass match {
+              case ProductCategoryCitySalesInputData(product_category1,city) =>
+                city
+            }
+
+            val ageGroup = AgeGroupPurchasesSalesInputDataCaseClass match {
+              case AgeGroupPurchasesSalesInputData(age,_) => age
+            }
+
+            val purchaseAmount = AgeGroupPurchasesSalesInputDataCaseClass match {
+              case AgeGroupPurchasesSalesInputData(_,purchaseAmount) => purchaseAmount
+            }
+
+            val userId = inputInCaseClass match {
+              case SalesInputData(user_id: Int, _,_,_,_,_,_,_,_,_,_,_) =>
+                user_id
+            }
+
             productBufferList += ((productId,"ProductID"))
-            val category = input(8)
-            val city = input(5)
+
             productCategoryBufferList +=((category,city))
 
-            val userId = input(0)
+            ageBufferList += ((ageGroup,"AgeGroup"))
+
             userIDBufferList += ((userId,"UserID"))
             sendUsersDataToActor(userIDBufferList)
+
+            //Sending age data to actor
+            sendProductsDataToActor(ageBufferList);
 
             if(productBufferList.length%2==0) {
               sendProductsDataToActor(productBufferList)
