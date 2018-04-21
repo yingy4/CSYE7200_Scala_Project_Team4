@@ -51,17 +51,17 @@ class UnitSpec extends PlaySpec {
 
   "Data buffers" should
     {
-      "size of bufferList must be 0" in {
+      "size of ProductbufferList must be 0" in {
 
-        val bufferListSize = bufferList.size
+        val bufferListSize = productBufferList.size
 
         bufferListSize must equal (0)
 
       }
 
-      "size of productCategory must be 0" in {
+      "size of productCategoryBufferList must be 0" in {
 
-        val productCategorySize = productCategory.size
+        val productCategorySize = productCategoryBufferList.size
 
         productCategorySize must equal (0)
 
