@@ -31,16 +31,9 @@ object SimpleActorExample {
         println(" Pattern Matching "+message.toString())
         if(wsOut != null)
           {
-            //val m = Json.toJson(message)
-
-               // println(scala.util.parsing.json.JSONObject(message))
                 wsOut ! message
-
-
           }
-
       }
-
       case _ =>
     }
 
