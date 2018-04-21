@@ -3,7 +3,7 @@ import org.scalatestplus.play._
 import play.api.test.Helpers._
 import play.api.test.FakeRequest
 import services.Counter
-import Utils.ApplicationUtils.{cleanDataFunction,ssc,TOPIC,props,bufferList,productCategory}
+import Utils.ApplicationUtils._
 
 /**
  * Unit tests can run without a full Play application.
