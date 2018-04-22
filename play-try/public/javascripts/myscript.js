@@ -11,19 +11,27 @@ var cityCountMap ={"A":Array.apply(null,Array(20)).map(Number.prototype.valueOf,
  var productJsonObject;
 
 var currentUsersCount = [];
+function productCategoryCitydataUpdate()
+{
+    for(var i= 0;i<productJsonObject.length;i++){
+
+    cityCountMap[productJsonObject[i][0][1]][productJsonObject[i][0][0]] = productJsonObject[i][1];
+}
+productCategoryCitygraph();
+}
 
 //all Users Highchart
 
 function refreshChart(){
-    Highcharts.chart('container', {
+    Highcharts.chart("container", {
     chart: {
-        type: 'column'
+        type: "column"
     },
     title: {
         text: "Top 10 Users Buying Products Chart"
     },
     subtitle: {
-        text: 'Current Users Buying Count'
+        text: "Current Users Buying Count"
     },
         plotOptions : {
         column: {
@@ -33,40 +41,40 @@ function refreshChart(){
         },
     xAxis: {
     categories:[],
-        type: 'category',
+        type: "category",
         labels: {
             rotation: -45,
             style: {
-                fontSize: '13px',
-                fontFamily: 'Verdana, sans-serif'
+                fontSize: "13px",
+                fontFamily: "Verdana, sans-serif"
             }
         }
     },
     yAxis: {
         min: 0,
         title: {
-            text: 'Users Buying Products Count'
+            text: "Users Buying Products Count"
         }
     },
     legend: {
         enabled: false
     },
     tooltip: {
-        pointFormat: '<b>{point.x:.1f} </b> Current Product Buying count: <b>{point.y:.1f} </b>'
+        pointFormat: "<b>{point.x:.1f} </b> Current Product Buying count: <b>{point.y:.1f} </b>"
     },
     series: [{
-        name: 'Population',
+        name: "Population",
         data: currentUsersCount,
         dataLabels: {
             enabled: true,
             rotation: -90,
-            color: '#FFFFFF',
-            align: 'right',
-            format: '{point.y:.1f}', // one decimal
+            color: "#FFFFFF",
+            align: "right",
+            format: "{point.y:.1f}", // one decimal
             y: 10, // 10 pixels down from the top
             style: {
-                fontSize: '13px',
-                fontFamily: 'Verdana, sans-serif'
+                fontSize: "13px",
+                fontFamily: "Verdana, sans-serif"
             }
         }
     }]
@@ -82,10 +90,10 @@ Highcharts.setOptions({
     }
 });
 
-Highcharts.chart('singleProduct', {
+Highcharts.chart("singleProduct", {
     chart: {
-        type: 'spline',
-        animation: Highcharts.svg, // don't animate in old IE
+        type: "spline",
+        animation: Highcharts.svg, // don"t animate in old IE
         marginRight: 10,
         events: {
             load: function () {
@@ -104,26 +112,26 @@ Highcharts.chart('singleProduct', {
         }
     },
     title: {
-        text: 'Live Product Sales Ticker :'+ productsOnChart[0][0]
+        text: "Live Product Sales Ticker :"+ productsOnChart[0][0]
     },
     xAxis: {
-        type: 'datetime',
+        type: "datetime",
         tickPixelInterval: 150
     },
     yAxis: {
         title: {
-            text: 'Value'
+            text: "Value"
         },
         plotLines: [{
             value: 0,
             width: 1,
-            color: '#808080'
+            color: "#808080"
         }]
     },
     tooltip: {
         formatter: function () {
-            return '<b>' + this.series.name + '</b><br/>' +
-                Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br/>' +
+            return "<b>" + this.series.name + "</b><br/>" +
+                Highcharts.dateFormat("%Y-%m-%d %H:%M:%S", this.x) + "<br/>" +
                 Highcharts.numberFormat(this.y, 2);
         }
     },
@@ -134,7 +142,7 @@ Highcharts.chart('singleProduct', {
         enabled: false
     },
     series: [{
-        name: 'Currently sold',
+        name: "Currently sold",
         data: (function () {
             // generate an array of random data
             var data = [],
@@ -159,55 +167,55 @@ Highcharts.chart('singleProduct', {
 
 function ageGroupHighChart(){
 
-Highcharts.chart('ageGroup', {
+Highcharts.chart("ageGroup", {
     chart: {
         plotBackgroundColor: null,
         plotBorderWidth: null,
         plotShadow: false,
-        type: 'pie'
+        type: "pie"
     },
     title: {
-        text: 'Buying Users count per Age group'
+        text: "Buying Users count per Age group"
     },
     tooltip: {
-        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+        pointFormat: "{series.name}: <b>{point.percentage:.1f}%</b>"
     },
     plotOptions: {
         pie: {
             allowPointSelect: true,
-            cursor: 'pointer',
+            cursor: "pointer",
             dataLabels: {
                 enabled: true,
-                format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                format: "<b>{point.name}</b>: {point.percentage:.1f} %",
                 style: {
-                    color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                    color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || "black"
                 }
             }
         }
     },
     series: [{
-        name: 'Number of Buyers',
+        name: "Number of Buyers",
         colorByPoint: true,
         data: [{
-            name: 'Age-Group: 0-17',
+            name: "Age-Group: 0-17",
             y: ageGenderData["0-17"]
         }, {
-            name: 'Age-Group: 18-25',
+            name: "Age-Group: 18-25",
             y: ageGenderData["18-25"]
         }, {
-            name: 'Age-Group: 26-35',
+            name: "Age-Group: 26-35",
             y: ageGenderData["26-35"]
         }, {
-            name: 'Age-Group: 36-45',
+            name: "Age-Group: 36-45",
             y: ageGenderData["36-45"]
         }, {
-            name: 'Age-Group: 46-50',
+            name: "Age-Group: 46-50",
             y: ageGenderData["46-50"]
         }, {
-            name: 'Age-Group: 51-55',
+            name: "Age-Group: 51-55",
             y: ageGenderData["51-55"]
         }, {
-            name: 'Age-Group: 55+',
+            name: "Age-Group: 55+",
             y: ageGenderData["55+"]
         }]
     }]
@@ -228,20 +236,20 @@ Highcharts.setOptions({
     }
 });
 
-Highcharts.chart('categoryvscity', {
+Highcharts.chart("categoryvscity", {
     chart: {
-        type: 'bar'
+        type: "bar"
     },
     title: {
-        text: 'Product Category VS City'
+        text: "Product Category VS City"
     },
     xAxis: {
-        categories: ['1', '2', '3','4','5','6','7','8','9','10','11', '12', '13','14','15','16','17','18','19','20']
+        categories: ["1", "2", "3","4","5","6","7","8","9","10","11", "12", "13","14","15","16","17","18","19","20"]
     },
     yAxis: {
         min: 0,
         title: {
-            text: 'Total products across different Category and City'
+            text: "Total products across different Category and City"
         }
     },
     plotOptions : {
@@ -300,7 +308,8 @@ else if(productJsonObject[0][0][1]==="UserID")
 
 else if(productJsonObject!=undefined && productJsonObject[0][0].length==2)
 {
-    productCategoryCitydataUpdate()
+    productCategoryCitydataUpdate();
+
 }
 
     }
@@ -308,8 +317,6 @@ else if(productJsonObject!=undefined && productJsonObject[0][0].length==2)
 
 streamSocket.onmessage = function (event) {
 
-
-debugger;
 var data = event.data;
 
 availableAnalytics(data);
@@ -324,23 +331,16 @@ ageGroupHighChart();
     }
 
     function addProduct() {
-    var productId = document.getElementById('product_id').value;
+    var productId = document.getElementById("product_id").value;
         productsOnChart = [];
         var newProduct = [productId.toString(),1];
         productsOnChart.push(newProduct);
-        document.getElementById('product_id').value = "";
+        document.getElementById("product_id").value = "";
         singleproduct();
     }
 
 
-function productCategoryCitydataUpdate()
-{
-    for(var i= 0;i<productJsonObject.length;i++){
 
-    cityCountMap[productJsonObject[i][0][1]][productJsonObject[i][0][0]] = productJsonObject[i][1];
-}
-productCategoryCitygraph();
-}
 
 
 

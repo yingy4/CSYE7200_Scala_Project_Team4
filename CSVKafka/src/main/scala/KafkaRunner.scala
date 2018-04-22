@@ -11,7 +11,7 @@ object KafkaRunner extends App {
       println(line);
 
       MyKafkaProducer.producer.send(new ProducerRecord[String,Any](MyKafkaProducer.TOPIC,line))
-      Thread.sleep(new Random().nextInt(2000)+1000)
+      Thread.sleep(scala.util.Random.nextInt(3000))
 
     }
     bufferedSource.close

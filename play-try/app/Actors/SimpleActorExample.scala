@@ -8,7 +8,7 @@ object SimpleActorExample {
 var wsOut: ActorRef = ActorRef.noSender
 
   class ProductActor extends Actor {
-    implicit private val SalesWrites = Json.writes[SalesInputData]
+    implicit private val salesWrites = Json.writes[SalesInputData]
     def receive = {
       case message: SalesInputData =>{
           val json = Json.toJson(message)
