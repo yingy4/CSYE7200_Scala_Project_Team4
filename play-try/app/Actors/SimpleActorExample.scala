@@ -5,7 +5,7 @@ import Utils.SalesInputData
 import play.api.libs.json._
 object SimpleActorExample {
 
-var wsOut: ActorRef = ActorRef.noSender
+var wsOut: ActorRef = null
 
   class ProductActor extends Actor {
     implicit private val salesWrites = Json.writes[SalesInputData]
@@ -14,8 +14,6 @@ var wsOut: ActorRef = ActorRef.noSender
           val json = Json.toJson(message)
           if(!wsOut.equals(ActorRef.noSender))
           wsOut ! Json.stringify(json)
-
-
       }
       case message: String => {
        // println(" Pattern Matching "+message.toString())

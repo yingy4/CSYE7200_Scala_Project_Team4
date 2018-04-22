@@ -24,6 +24,50 @@ Highcharts.setOptions({
 });
 
 
+Highcharts.chart("categoryvscity", {
+    chart: {
+        type: "bar"
+    },
+    title: {
+        text: "Product Category VS City"
+    },
+    xAxis: {
+        categories: ["1", "2", "3","4","5","6","7","8","9","10","11", "12", "13","14","15","16","17","18","19","20"]
+    },
+    yAxis: {
+        min: 0,
+        title: {
+            text: "Total products across different Category and City"
+        }
+    },
+    plotOptions : {
+                series: {
+                    animation : false
+                }
+
+                },
+    legend: {
+        reversed: true
+    },
+    plotOptions: {
+        series: {
+            stacking: "normal"
+        }
+    },
+    series: [{
+        name: "City A",
+        data: cityCountMap["A"]
+    }, {
+        name: "City B",
+        data:  cityCountMap["B"]
+    }, {
+        name: "City C",
+        data:  cityCountMap["C"]
+    }]
+});
+
+}
+
 
 function productCategoryCitydataUpdate()
 {
@@ -241,49 +285,6 @@ Highcharts.chart("ageGroup", {
 }
 
 
-Highcharts.chart("categoryvscity", {
-    chart: {
-        type: "bar"
-    },
-    title: {
-        text: "Product Category VS City"
-    },
-    xAxis: {
-        categories: ["1", "2", "3","4","5","6","7","8","9","10","11", "12", "13","14","15","16","17","18","19","20"]
-    },
-    yAxis: {
-        min: 0,
-        title: {
-            text: "Total products across different Category and City"
-        }
-    },
-    plotOptions : {
-                series: {
-                    animation : false
-                }
-
-                },
-    legend: {
-        reversed: true
-    },
-    plotOptions: {
-        series: {
-            stacking: "normal"
-        }
-    },
-    series: [{
-        name: "City A",
-        data: cityCountMap["A"]
-    }, {
-        name: "City B",
-        data:  cityCountMap["B"]
-    }, {
-        name: "City C",
-        data:  cityCountMap["C"]
-    }]
-});
-
-}
 
     function availableAnalytics(salesItemRow){
 

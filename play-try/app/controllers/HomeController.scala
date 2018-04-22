@@ -74,8 +74,8 @@
               }
 
               val userId = inputInCaseClass match {
-                case SalesInputData(user_id: Int, _,_,_,_,_,_,_,_,_,_,_) =>
-                  user_id
+                case SalesInputData(userId: Int, _,_,_,_,_,_,_,_,_,_,_) =>
+                  userId
               }
 
               productBufferList += ((productId,"ProductID"))
