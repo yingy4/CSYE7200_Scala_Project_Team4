@@ -2,9 +2,12 @@
 
 # CSYE7200_Scala_Project_Team4
 This is the CSYE7200 Big Data Systems Engineering Using Scala Final Project for Team 4 Spring 2018
+
 Team Members:
-Akshay Jain
-Vinay Gor
+
+Akshay Jain [jain.aksha@husky.neu.edu](jain.aksha@husky.neu.edu)
+
+Vinay Gor [gor.v@husky.neu.edu](gor.v@husky.neu.edu)
 
 # Building Real-Time Analytics Dashboard Using Apache Spark
 
