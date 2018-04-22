@@ -2,10 +2,11 @@ package Actors
 
 import akka.actor.{Actor, ActorRef}
 import Utils.SalesInputData
+import play.api.Logger
 import play.api.libs.json._
 object SimpleActorExample {
 
-var wsOut: ActorRef = null
+var wsOut: ActorRef = ActorRef.noSender
 
   class ProductActor extends Actor {
     implicit private val salesWrites = Json.writes[SalesInputData]
@@ -22,7 +23,7 @@ var wsOut: ActorRef = null
                 wsOut ! message
           }
       }
-      case _ =>
+      case _ => Logger.error("Exception occured at SimpleActorExample. Unexpected message received.")
     }
 
   }

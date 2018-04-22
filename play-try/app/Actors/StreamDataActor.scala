@@ -7,10 +7,9 @@ import Actors.SimpleActorExample.wsOut
 
 
 class StreamDataActor(out:ActorRef) extends Actor {
-
+  wsOut = out
   def receive = {
     case "streaming" =>
-      wsOut = out
       Logger.info("Received a message")
   }
 }
