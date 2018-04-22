@@ -12,10 +12,8 @@ GET     /assets/*file               controllers.Assets.versioned(path="/public",
 # Calling the start streaming
 GET     /startStreaming             controllers.HomeController.startStreaming
 
-# Calling the SparkStreamController
-GET     /SparkStream                controllers.SparkStreamController.index
 
-# Stoping the spark streaming
+# WebSocket Connection endpoint
 GET     /streamData              controllers.HomeController.streamData
 
 

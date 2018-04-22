@@ -1,165 +1,16 @@
 
-console.log("I am here")
+
 var url = "ws://localhost:9000/streamData";
 
 var streamSocket = new WebSocket(url);
-streamSocket.onmessage = function (event) {
 
-//console.log(event.data);
-debugger;
-var data = event.data;
-
-availableAnalytics(data);
-};
-streamSocket.onopen = function() {
-streamSocket.send("streaming");
-ageGroupHighChart();
-};
-
-// main logic
 var productsOnChart = [], allProductsCount=[];
-var productCategory = new Array(20);
-var cityACount = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
-var cityBCount = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
-var cityCCount = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
-var ageGenderData = {"0-17":0,"18-25":0,"26-35":0,"36-45":0,"46-50":0,"51-55":0,"55+":0}
+var ageGenderData = {"0-17":0,"18-25":0,"26-35":0,"36-45":0,"46-50":0,"51-55":0,"55+":0};
+var cityCountMap ={"A":Array.apply(null,Array(20)).map(Number.prototype.valueOf,0),"B":Array.apply(null,Array(20)).map(Number.prototype.valueOf,0),"C":Array.apply(null,Array(20)).map(Number.prototype.valueOf,0)};
 
  var productJsonObject;
 
-var currentUsersCount = [];//[["1002181",0]];
-
-    function availableAnalytics(salesItemRow){
-
-       // console.log(product);
-       productJsonObject = JSON.parse(salesItemRow);
-debugger;
-if(productJsonObject[0][0][1]=='ProductID')
-{
-   allProductsCount = productJsonObject;
-}
-else if(productJsonObject[0][0][1]=='AgeGroup'){
-    for(var i =0;i<productJsonObject.length;i++){
-        ageGenderData[productJsonObject[i][0][0]] = productJsonObject[i][1]
-    }
-    ageGroupHighChart();
-}
-else if(productJsonObject[0][0][1]=='UserID')
-{
-    currentUsersCount=[];
-    for(var i =0;i<productJsonObject.length;i++){
-    obj = ["UserID : "+productJsonObject[i][0][0],productJsonObject[i][1]];
-    currentUsersCount.push(obj);
-}
-
-        refreshChart();
-}
-
-
-else if(productJsonObject!=undefined && productJsonObject[0][0].length==2)
-{
-    productCategoryCitydataUpdate()
-}
-
-    }
-
-
-    function resetUsersChart(){
-        currentUsersCount = [];
-    }
-
-    function addProduct() {
-    var productId = document.getElementById('product_id').value;
-        productsOnChart = [];
-        var newProduct = [productId.toString(),1];
-        productsOnChart.push(newProduct);
-        document.getElementById('product_id').value = "";
-        singleproduct();
-    }
-
-//productCategoryCityDataUpdate
-
-function productCategoryCitydataUpdate()
-{
-    for(var i= 0;i<productJsonObject.length;i++){
-    var index = productJsonObject[i][0][0];
-
-    var city = productJsonObject[i][0][1];
-
-    if(city == 'A')
-    {
-        cityACount[index] =productJsonObject[i][1];
-    }
-    if(city == 'B')
-    {
-        cityBCount[index] =productJsonObject[i][1];
-    }
-    if(city == 'C')
-    {
-        cityCCount[index] =productJsonObject[i][1];
-    }
-}
-productCategoryCitygraph();
-}
-
-
-function productCategoryCitygraph()
-{
-Highcharts.setOptions({
-    plotOptions: {
-        series: {
-            animation: false
-        }
-    }
-});
-
-Highcharts.chart('categoryvscity', {
-    chart: {
-        type: 'bar'
-    },
-    title: {
-        text: 'Product Category VS City'
-    },
-    xAxis: {
-        categories: ['1', '2', '3','4','5','6','7','8','9','10','11', '12', '13','14','15','16','17','18','19','20']
-    },
-    yAxis: {
-        min: 0,
-        title: {
-            text: 'Total products across different Category and City'
-        }
-    },
-    plotOptions : {
-                series: {
-                    animation : false
-                }
-
-                },
-    legend: {
-        reversed: true
-    },
-    plotOptions: {
-        series: {
-            stacking: 'normal'
-        }
-    },
-    series: [{
-        name: 'City A',
-        data: cityACount
-    }, {
-        name: 'City B',
-        data: cityBCount
-    }, {
-        name: 'City C',
-        data: cityCCount
-    }]
-});
-
-}
-
-
-
-
-
+var currentUsersCount = [];
 
 //all Users Highchart
 
@@ -169,7 +20,7 @@ function refreshChart(){
         type: 'column'
     },
     title: {
-        text: 'Top 10 Users Buying Products Chart'
+        text: "Top 10 Users Buying Products Chart"
     },
     subtitle: {
         text: 'Current Users Buying Count'
@@ -364,4 +215,138 @@ Highcharts.chart('ageGroup', {
 
 
 }
+
+
+
+function productCategoryCitygraph()
+{
+Highcharts.setOptions({
+    plotOptions: {
+        series: {
+            animation: false
+        }
+    }
+});
+
+Highcharts.chart('categoryvscity', {
+    chart: {
+        type: 'bar'
+    },
+    title: {
+        text: 'Product Category VS City'
+    },
+    xAxis: {
+        categories: ['1', '2', '3','4','5','6','7','8','9','10','11', '12', '13','14','15','16','17','18','19','20']
+    },
+    yAxis: {
+        min: 0,
+        title: {
+            text: 'Total products across different Category and City'
+        }
+    },
+    plotOptions : {
+                series: {
+                    animation : false
+                }
+
+                },
+    legend: {
+        reversed: true
+    },
+    plotOptions: {
+        series: {
+            stacking: "normal"
+        }
+    },
+    series: [{
+        name: "City A",
+        data: cityCountMap["A"]
+    }, {
+        name: "City B",
+        data:  cityCountMap["B"]
+    }, {
+        name: "City C",
+        data:  cityCountMap["C"]
+    }]
+});
+
+}
+
+    function availableAnalytics(salesItemRow){
+
+
+       productJsonObject = JSON.parse(salesItemRow);
+if(productJsonObject[0][0][1]==="ProductID")
+{
+   allProductsCount = productJsonObject;
+}
+else if(productJsonObject[0][0][1]==="AgeGroup"){
+    for(var i =0;i<productJsonObject.length;i++){
+        ageGenderData[productJsonObject[i][0][0]] = productJsonObject[i][1];
+    }
+    ageGroupHighChart();
+}
+else if(productJsonObject[0][0][1]==="UserID")
+{
+    currentUsersCount=[];
+    for(var i =0;i<productJsonObject.length;i++){
+   var obj = ["UserID : "+productJsonObject[i][0][0],productJsonObject[i][1]];
+    currentUsersCount.push(obj);
+}
+
+        refreshChart();
+}
+
+
+else if(productJsonObject!=undefined && productJsonObject[0][0].length==2)
+{
+    productCategoryCitydataUpdate()
+}
+
+    }
+
+
+streamSocket.onmessage = function (event) {
+
+
+debugger;
+var data = event.data;
+
+availableAnalytics(data);
+};
+streamSocket.onopen = function() {
+streamSocket.send("streaming");
+ageGroupHighChart();
+};
+
+    function resetUsersChart(){
+        currentUsersCount = [];
+    }
+
+    function addProduct() {
+    var productId = document.getElementById('product_id').value;
+        productsOnChart = [];
+        var newProduct = [productId.toString(),1];
+        productsOnChart.push(newProduct);
+        document.getElementById('product_id').value = "";
+        singleproduct();
+    }
+
+
+function productCategoryCitydataUpdate()
+{
+    for(var i= 0;i<productJsonObject.length;i++){
+
+    cityCountMap[productJsonObject[i][0][1]][productJsonObject[i][0][0]] = productJsonObject[i][1];
+}
+productCategoryCitygraph();
+}
+
+
+
+
+
+
+
+
 

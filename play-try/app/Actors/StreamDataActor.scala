@@ -1,8 +1,8 @@
 package Actors
 
 import play.api.Logger
-import akka.actor.{Actor, ActorSystem, Props, ActorRef}
-import play.api.libs.json.Json
+import akka.actor.{Actor, Props, ActorRef}
+
 import Actors.SimpleActorExample.wsOut
 
 
