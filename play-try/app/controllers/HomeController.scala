@@ -1,6 +1,7 @@
   package controllers
   import javax.inject._
-  import akka.actor.{ActorSystem}
+
+  import akka.actor.ActorSystem
   import play.api.mvc._
   import play.twirl.api.Html
   import akka.stream.Materializer
@@ -8,6 +9,7 @@
   import Utils.ApplicationUtils._
   import Utils._
   import Actors.StreamDataActor
+  import org.apache.spark.streaming.StreamingContextState
 
 
   /**
@@ -118,14 +120,12 @@
 
     def startStreaming = Action {
       implicit request => {
-        ssc.start()
-        println("Streaming Data Started!")
+        if(ssc.getState() ne StreamingContextState.ACTIVE) {
+          ssc.start()
+          println("Streaming Data Started!")
+        }
         Ok(views.html.index("StreamData"))
       }
-    }
-
-    def stopStreaming = Action {
-      Redirect("/")
     }
 
 

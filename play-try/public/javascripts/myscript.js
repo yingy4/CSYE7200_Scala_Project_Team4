@@ -12,6 +12,7 @@ var cityCountMap ={"A":Array.apply(null,Array(20)).map(Number.prototype.valueOf,
 
 var currentUsersCount = [];
 
+var singleProductTicker;
 
 function productCategoryCitygraph()
 {
@@ -160,11 +161,11 @@ Highcharts.chart("singleProduct", {
 
                 // set up the updating of the chart each second
                 var series = this.series[0];
-                var product = allProductsCount.find(function(e){return e[0][0] === productsOnChart[0][0]});
-                if(product !== undefined){
+
+                if(singleProductTicker !== undefined){
                     setInterval(function () {
                         var x = (new Date()).getTime(), // current time
-                            y = product[1];
+                            y = singleProductTicker[1];
                         series.addPoint([x, y], true, true);
                     }, 1000);
                 }
@@ -210,11 +211,11 @@ Highcharts.chart("singleProduct", {
                 i;
 
             for (i = -19; i <= 0; i += 1) {
-            var product = allProductsCount.find(function(e){return e[0][0] === productsOnChart[0][0]});
-            if(product !== undefined){
+
+            if(singleProductTicker !== undefined){
                 data.push({
                     x: time + i * 1000,
-                    y: product[1]
+                    y: singleProductTicker[1]
                 });
             }
 
@@ -288,6 +289,10 @@ Highcharts.chart("ageGroup", {
 
     function availableAnalytics(salesItemRow){
 
+    if(productsOnChart.length !== 0 ){
+         singleProductTicker = allProductsCount.find(function(e){return e[0][0] === productsOnChart[0][0]});
+    }
+
 
        productJsonObject = JSON.parse(salesItemRow);
 if(productJsonObject[0][0][1]==="ProductID")
@@ -332,9 +337,6 @@ streamSocket.send("streaming");
 ageGroupHighChart();
 };
 
-    function resetUsersChart(){
-        currentUsersCount = [];
-    }
 
     function addProduct() {
     var productId = document.getElementById("product_id").value;

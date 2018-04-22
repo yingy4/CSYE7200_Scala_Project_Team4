@@ -4,7 +4,7 @@ import org.apache.kafka.clients.producer.{ProducerRecord}
 
 object KafkaRunner extends App {
 
-    val bufferedSource = io.Source.fromFile("/Users/akshayjain/Downloads/test.csv")
+    val bufferedSource = io.Source.fromFile("data/data.csv")
     for (line <- bufferedSource.getLines) {
 
       println("--------------------------")
