@@ -46,30 +46,30 @@
 
               val inputInCaseClass = SalesInputData(input(0), input(1), input(2), input(3), input(4), input(5), input(6), input(7), input(8), input(9), input(10), input(11))
 
-              val ProductCategoryCitySalesInputDataCaseClass = ProductCategoryCitySalesInputData(input(8),input(5))
+              val productCategoryCitySalesInputDataCaseClass = ProductCategoryCitySalesInputData(input(8),input(5))
 
-              val AgeGroupPurchasesSalesInputDataCaseClass = AgeGroupPurchasesSalesInputData(input(3),input(11))
+              val ageGroupPurchasesSalesInputDataCaseClass = AgeGroupPurchasesSalesInputData(input(3),input(11))
 
               val productId = inputInCaseClass match {
-                case SalesInputData(_, product_id: String, _,_,_,_,_,_,_,_,_,_) =>
-                  product_id
+                case SalesInputData(_, productId: String, _,_,_,_,_,_,_,_,_,_) =>
+                  productId
               }
 
-              val category = ProductCategoryCitySalesInputDataCaseClass match {
-                case ProductCategoryCitySalesInputData(product_category1,_) =>
-                  product_category1
+              val category = productCategoryCitySalesInputDataCaseClass match {
+                case ProductCategoryCitySalesInputData(productCategory1,_) =>
+                  productCategory1
               }
 
-              val city = ProductCategoryCitySalesInputDataCaseClass match {
+              val city = productCategoryCitySalesInputDataCaseClass match {
                 case ProductCategoryCitySalesInputData(_,city) =>
                   city
               }
 
-              val ageGroup = AgeGroupPurchasesSalesInputDataCaseClass match {
+              val ageGroup = ageGroupPurchasesSalesInputDataCaseClass match {
                 case AgeGroupPurchasesSalesInputData(age,_) => age
               }
 
-              val purchaseAmount = AgeGroupPurchasesSalesInputDataCaseClass match {
+              val purchaseAmount = ageGroupPurchasesSalesInputDataCaseClass match {
                 case AgeGroupPurchasesSalesInputData(_,purchaseAmount) => purchaseAmount
               }
 

@@ -11,6 +11,20 @@ var cityCountMap ={"A":Array.apply(null,Array(20)).map(Number.prototype.valueOf,
  var productJsonObject;
 
 var currentUsersCount = [];
+
+
+function productCategoryCitygraph()
+{
+Highcharts.setOptions({
+    plotOptions: {
+        series: {
+            animation: false
+        }
+    }
+});
+
+
+
 function productCategoryCitydataUpdate()
 {
     for(var i= 0;i<productJsonObject.length;i++){
@@ -19,6 +33,8 @@ function productCategoryCitydataUpdate()
 }
 productCategoryCitygraph();
 }
+
+
 
 //all Users Highchart
 
@@ -100,8 +116,8 @@ Highcharts.chart("singleProduct", {
 
                 // set up the updating of the chart each second
                 var series = this.series[0];
-                var product = allProductsCount.find(function(e){return e[0][0] == productsOnChart[0][0]});
-                if(product != undefined){
+                var product = allProductsCount.find(function(e){return e[0][0] === productsOnChart[0][0]});
+                if(product !== undefined){
                     setInterval(function () {
                         var x = (new Date()).getTime(), // current time
                             y = product[1];
@@ -150,8 +166,8 @@ Highcharts.chart("singleProduct", {
                 i;
 
             for (i = -19; i <= 0; i += 1) {
-            var product = allProductsCount.find(function(e){return e[0][0] == productsOnChart[0][0]});
-            if(product != undefined){
+            var product = allProductsCount.find(function(e){return e[0][0] === productsOnChart[0][0]});
+            if(product !== undefined){
                 data.push({
                     x: time + i * 1000,
                     y: product[1]
@@ -225,17 +241,6 @@ Highcharts.chart("ageGroup", {
 }
 
 
-
-function productCategoryCitygraph()
-{
-Highcharts.setOptions({
-    plotOptions: {
-        series: {
-            animation: false
-        }
-    }
-});
-
 Highcharts.chart("categoryvscity", {
     chart: {
         type: "bar"
@@ -306,7 +311,7 @@ else if(productJsonObject[0][0][1]==="UserID")
 }
 
 
-else if(productJsonObject!=undefined && productJsonObject[0][0].length==2)
+else if(productJsonObject!== undefined && productJsonObject[0][0].length==2)
 {
     productCategoryCitydataUpdate();
 

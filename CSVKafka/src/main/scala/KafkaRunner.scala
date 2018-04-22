@@ -1,6 +1,6 @@
 import org.apache.kafka.clients.producer.{ProducerRecord}
 
-import java.util.{Random}
+
 
 object KafkaRunner extends App {
 
@@ -11,7 +11,7 @@ object KafkaRunner extends App {
       println(line);
 
       MyKafkaProducer.producer.send(new ProducerRecord[String,Any](MyKafkaProducer.TOPIC,line))
-      Thread.sleep(scala.util.Random.nextInt(3000))
+      Thread.sleep(2000)
 
     }
     bufferedSource.close
