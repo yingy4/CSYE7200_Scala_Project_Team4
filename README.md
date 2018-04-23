@@ -24,7 +24,7 @@ Generally in an ecommerce platform, the analysis of the sales of products or ser
 7. Plays's Web socket is used which allows two way full duplex communication. Web socket requests for the streamed data.
 8. The streamed data from Spark Streaming is filtered, collected and passed to the web socket using the Akka Actor System continuously.
 9. Web socket ccollects the data at the front end and passes the data to the Highcharts to display analytics graphs.
-10. We can enter a specific ProdcutId and see how the products sales go on every second. 
+10. We can enter a specific ProdcutId and see how the products sales go on continuously. 
 
 # Steps to run the project on the local machine
 1. Install ```java 1.8 version``` on your machine if not installed.
