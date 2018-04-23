@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/akshaysjk/CSYE7200_Scala_Project_Team4.svg?branch=master)](https://travis-ci.org/akshaysjk/CSYE7200_Scala_Project_Team4)  [![Codacy Badge](https://api.codacy.com/project/badge/Grade/9f6ffa2abde74ab38a5c4ed58e3fc205)](https://www.codacy.com/app/akshaysjk/CSYE7200_Scala_Project_Team4?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=akshaysjk/CSYE7200_Scala_Project_Team4&amp;utm_campaign=Badge_Grade)
+[![Build Status](https://travis-ci.org/akshaysjk/CSYE7200_Scala_Project_Team4.svg?branch=master)](https://travis-ci.org/akshaysjk/CSYE7200_Scala_Project_Team4)  [![Codacy Badge](https://api.codacy.com/project/badge/Grade/261dc4abaddf4ecc81f0fa2c90cd3c4e)](https://www.codacy.com/app/akshaysjk/CSYE7200_Scala_Project_Team4?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=akshaysjk/CSYE7200_Scala_Project_Team4&amp;utm_campaign=Badge_Grade)
 
 # CSYE7200_Scala_Project_Team4
 This is the CSYE7200 Big Data Systems Engineering Using Scala Final Project for Team 4 Spring 2018
@@ -10,6 +10,7 @@ Akshay Jain [jain.aksha@husky.neu.edu](jain.aksha@husky.neu.edu)
 Vinay Gor [gor.v@husky.neu.edu](gor.v@husky.neu.edu)
 
 # Building Real-Time Analytics Dashboard Using Apache Spark
+  [Final Presentation](https://docs.google.com/presentation/d/e/2PACX-1vS6L3ivwbZdrVwwhpO_z0BVz4M2i9ZT_Dpt8brtqnmO_-saqu3RP3yEJw6EoWtB2dJduljWWPFXH00p/pub?start=false&loop=false&delayms=3000)
 
 # Abstract
 Generally in an ecommerce platform, the analysis of the sales of products or service happens with the help of a job which is scheduled to execute or run after a given interval of time. In situations which require immediate/real-time actions such as credit card fraud, this model won’t be suitable and will not provide accurate solution.To overcome the drawbacks of this model, we have proposed a real-time analytics model using Stream Analytics.In this project we will create a Real-time dashboard for an ecommerce platform. Dashboard will help to see hoe the sales go on a particular day across different locations. Warehouse and in ventory management at peak locations can be handled gracefully based on real-time analysis.
