@@ -16,10 +16,16 @@ cache:
 
 
 script:
-  - sbt clean coverage test
-  - sbt coverageReport
-  - sbt coverageAggregate
-  - sbt codacyCoverage
+   - cd $TRAVIS_BUILD_DIR/CSVKafka
+   - sbt ++$TRAVIS_SCALA_VERSION clean coverage test
+   - sbt ++$TRAVIS_SCALA_VERSION coverageReport
+   - ls $TRAVIS_BUILD_DIR/CSVKafka/target
+   - pwd
+   - cd $TRAVIS_BUILD_DIR/play-try
+   - sbt ++$TRAVIS_SCALA_VERSION clean coverage test
+   - sbt ++$TRAVIS_SCALA_VERSION coverageReport
+   - ls $TRAVIS_BUILD_DIR/play-try/target
+   - pwd
 
 before_cache:
   # Tricks to avoid unnecessary cache updates
