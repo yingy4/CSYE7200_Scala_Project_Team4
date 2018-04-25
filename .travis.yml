@@ -3,7 +3,6 @@ language: scala
 jdk: oraclejdk8
 
 scala:
-   - 2.10.4
    - 2.12.4
 
 branches:
@@ -17,10 +16,10 @@ cache:
 
 
 script:
-  - sbt ++$TRAVIS_SCALA_VERSION clean coverage test
-  - sbt ++$TRAVIS_SCALA_VERSION coverageReport
-  - sbt ++$TRAVIS_SCALA_VERSION coverageAggregate
-  - sbt ++$TRAVIS_SCALA_VERSION codacyCoverage
+  - sbt clean coverage test
+  - sbt coverageReport
+  - sbt coverageAggregate
+  - sbt codacyCoverage
 
 before_cache:
   # Tricks to avoid unnecessary cache updates
